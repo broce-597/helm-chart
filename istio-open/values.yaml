@@ -1,0 +1,77 @@
+global:
+  repository: registry.cn-hangzhou.aliyuncs.com
+  repositoryNamespace: harmony-cloud
+  images:
+    kialiImage: kiali:v1.42
+    prometheusImage: prometheus:v2.26.0
+    prometheusConfigmapReloadImage: configmap-reload:v0.5.0
+  imagePullPolicy: Always
+
+  # istio镜像
+  # $global.repository/$global.repositoryNamespace/istio-operator:$global.istio.version
+  # $global.repository/$global.repositoryNamespace/proxyv2:$global.istio.version
+  # $global.repository/$global.repositoryNamespace/pilot:$global.istio.version
+  istio:
+    replicaCount: 1
+    version: 1.12.4
+    # istio resources （include pilot(istiod)/ingressgateway）
+    service:
+      ingressgateway:
+        type: NodePort
+    resources:
+      # pilot:
+      #   limits:
+      #     cpu: 8
+      #     memory: 16Gi
+      #   requests:
+      #     cpu: 4
+      #     memory: 8Gi
+      # ingressgateway:
+      #   limits:
+      #     cpu: 2
+      #     memory: 4Gi
+      #   requests:
+      #     cpu: 1
+      #     memory: 2Gi
+      pilot:
+        limits:
+          cpu: "1"
+          memory: 1Gi
+        requests:
+          cpu: "1"
+          memory: 1Gi
+      ingressgateway:
+        limits:
+          cpu: "1"
+          memory: 1Gi
+        requests:
+          cpu: "1"
+          memory: 1Gi
+
+  # ------------------------------------------------------------------------------
+  # kiali:
+  # ------------------------------------------------------------------------------
+  kiali:
+    service:
+      type: ClusterIP
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2048Mi
+      requests:
+        cpu: 1000m
+        memory: 2048Mi
+
+  # ------------------------------------------------------------------------------
+  # promutheus:
+  # ------------------------------------------------------------------------------
+  prometheus:
+    service:
+      type: ClusterIP
+    resources:
+      limits:
+        cpu: 1000m
+        memory: 2048Mi
+      requests:
+        cpu: 1000m
+        memory: 2048Mi
